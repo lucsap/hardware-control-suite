@@ -1,0 +1,37 @@
+{
+	"app-id": "com.github.lucsap.HCSuite",
+	"runtime": "org.freedesktop.Platform",
+	"runtime-version": "23.08",
+	"sdk": "org.freedesktop.Sdk",
+	"sdk-extensions": ["org.freedesktop.Sdk.Extension.rust-stable"],
+	"command": "hcsuite",
+	"finish-args": [
+		"--share=ipc",
+		"--socket=fallback-x11",
+		"--socket=wayland",
+		"--device=dri"
+	],
+	"build-options": {
+		"append-path": "/usr/lib/sdk/rust-stable/bin"
+	},
+	"modules": [{
+		"name": "hcsuite",
+		"buildsystem": "simple",
+		"build-options": {
+			"env": {
+				"CARGO_HOME": "/run/build/hcsuite/cargo"
+			}
+		},
+		"build-commands": [
+			"cargo --offline fetch --manifest-path Cargo.toml --verbose",
+			"cargo --offline build --release --verbose",
+			"install -Dm755 ./target/release/hcsuite -t /app/bin/"
+		],
+		"sources": [{
+			"type": "dir",
+			"path": "."
+		},
+			"cargo-sources.json"
+		]
+	}]
+}
